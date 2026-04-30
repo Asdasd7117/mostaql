@@ -49,14 +49,14 @@ dependencies {
     implementation("androidx.activity:activity-ktx:1.8.2")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
+    // =====================
     // Coroutines
+    // =====================
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
     // =====================
-    // 🔥 SUPABASE (FIXED)
+    // 🔥 SUPABASE (NO BOM - FIXED)
     // =====================
-    implementation("io.github.jan-tennert.supabase:bom:3.6.0")
-
     implementation("io.github.jan-tennert.supabase:auth-kt:3.6.0")
     implementation("io.github.jan-tennert.supabase:postgrest-kt:3.6.0")
 
