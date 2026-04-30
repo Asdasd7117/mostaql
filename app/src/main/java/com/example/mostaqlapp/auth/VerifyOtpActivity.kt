@@ -41,11 +41,10 @@ class VerifyOtpActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 try {
 
-                    // 🔥 Supabase OTP الصحيح
+                    // ✅ الحل الصحيح 100%
                     SupabaseClient.client.auth.verifyEmailOtp(
                         email = email,
-                        token = code,
-                        type = io.github.jan.supabase.auth.providers.builtin.Email.OtpType.Email
+                        token = code
                     )
 
                     Toast.makeText(this@VerifyOtpActivity, "تم التحقق بنجاح", Toast.LENGTH_SHORT).show()
