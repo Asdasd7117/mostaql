@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.example.mostaql"
-    compileSdk = 36   // ✔ خليته مثل ما طلبت
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.mostaql"
@@ -49,14 +49,15 @@ dependencies {
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
-    // 🔥 Supabase (ثابت بدون BOM)
-    implementation("io.github.jan-tennert.supabase:auth-kt:2.5.1")
-    implementation("io.github.jan-tennert.supabase:postgrest-kt:2.5.1")
+    // 🔥 Supabase (المستقر والمضمون)
+    implementation(platform("io.github.jan-tennert.supabase:bom:2.6.1"))
+    implementation("io.github.jan-tennert.supabase:auth-kt")
+    implementation("io.github.jan-tennert.supabase:postgrest-kt")
 
-    // HTTP
+    // HTTP client
     implementation("io.ktor:ktor-client-okhttp:2.3.7")
 
-    // Serialization
+    // JSON Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 
     // RecyclerView
