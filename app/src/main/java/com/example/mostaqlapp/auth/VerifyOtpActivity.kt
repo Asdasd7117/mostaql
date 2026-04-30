@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.example.mostaql.R
-import com.example.mostaql.data.SupabaseClient
+import com.example.mostaql.data.SupabaseClientProvider
+import io.github.jan.supabase.auth.auth
 import kotlinx.coroutines.launch
 
 class VerifyOtpActivity : AppCompatActivity() {
@@ -41,17 +41,26 @@ class VerifyOtpActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 try {
 
-                    // ✅ الحل الصحيح 100%
-                    SupabaseClient.client.auth.verifyEmailOtp(
+                    // ✅ OTP verification (Supabase 3.6)
+                    SupabaseClientProvider.client.auth.verifyEmailOtp(
                         email = email,
                         token = code
                     )
 
-                    Toast.makeText(this@VerifyOtpActivity, "تم التحقق بنجاح", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@VerifyOtpActivity,
+                        "تم التحقق بنجاح",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
                     finish()
 
                 } catch (e: Exception) {
-                    Toast.makeText(this@VerifyOtpActivity, "خطأ: ${e.message}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this@VerifyOtpActivity,
+                        "خطأ: ${e.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
                 } finally {
                     progress.visibility = ProgressBar.GONE
                     verifyBtn.isEnabled = true
