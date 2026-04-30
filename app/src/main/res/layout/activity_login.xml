@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#121212"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- عنوان التطبيق -->
+        <TextView
+            android:text="مستقل"
+            android:textColor="#FFFFFF"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:paddingBottom="32dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <!-- البريد -->
+        <EditText
+            android:id="@+id/email"
+            android:hint="البريد الإلكتروني"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#888888"
+            android:inputType="textEmailAddress"
+            android:backgroundTint="#1E88E5"
+            android:padding="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- كلمة المرور -->
+        <EditText
+            android:id="@+id/password"
+            android:hint="كلمة المرور"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#888888"
+            android:inputType="textPassword"
+            android:backgroundTint="#1E88E5"
+            android:padding="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- زر تسجيل الدخول -->
+        <Button
+            android:id="@+id/loginBtn"
+            android:text="تسجيل الدخول"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#1E88E5"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- Progress -->
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:visibility="gone"
+            android:layout_marginTop="12dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <!-- نسيت كلمة المرور -->
+        <Button
+            android:id="@+id/forgotBtn"
+            android:text="نسيت كلمة المرور؟"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#555555"
+            android:layout_marginTop="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- إنشاء حساب -->
+        <Button
+            android:id="@+id/registerBtn"
+            android:text="إنشاء حساب"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#00C853"
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</ScrollView>

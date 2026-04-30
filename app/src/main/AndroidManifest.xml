@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- 🌐 إنترنت (ضروري لـ Supabase) -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.MostaqlApp"
+        tools:targetApi="31">
+
+        <!-- 🚀 MainActivity (مرة واحدة فقط + Launcher) -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+
+        <!-- 🔐 تسجيل الدخول -->
+        <activity android:name=".auth.LoginActivity" />
+
+        <!-- 📝 تسجيل حساب -->
+        <activity android:name=".auth.RegisterActivity" />
+
+        <!-- 🔑 نسيت كلمة المرور -->
+        <activity android:name=".auth.ForgotPasswordActivity" />
+
+        <!-- 👤 اختيار نوع المستخدم -->
+        <activity android:name=".user.ChooseRoleActivity" />
+
+        <!-- 🏠 الصفحة الرئيسية -->
+        <activity android:name=".home.HomeActivity" />
+
+        <!-- ➕ إضافة خدمة -->
+        <activity android:name=".home.AddServiceActivity" />
+
+        <!-- 💬 الشات -->
+        <activity android:name=".chat.ChatActivity" />
+
+        <!-- ⭐ التقييم -->
+        <activity android:name=".chat.RatingActivity" />
+
+    </application>
+
+</manifest>

@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">مستقل</string>
+    <string name="login">تسجيل الدخول</string>
+    <string name="register">إنشاء حساب</string>
+    <string name="forgot_password">نسيت كلمة المرور</string>
+</resources>

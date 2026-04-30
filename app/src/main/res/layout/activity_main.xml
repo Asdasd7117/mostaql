@@ -1,0 +1,43 @@
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_margin="8dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <TextView
+            android:id="@+id/title"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/description"/>
+
+        <TextView
+            android:id="@+id/price"
+            android:textColor="#00C853"/>
+
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:numStars="5"
+            android:stepSize="0.5"/>
+
+        <LinearLayout
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/chatBtn"
+                android:text="مراسلة"
+                android:backgroundTint="#00C853"/>
+
+            <Button
+                android:id="@+id/rateBtn"
+                android:text="تقييم"
+                android:backgroundTint="#1E88E5"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
