@@ -49,15 +49,14 @@ dependencies {
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
-    // 🔥 Supabase (المستقر والمضمون)
-    implementation(platform("io.github.jan-tennert.supabase:bom:2.6.1"))
-    implementation("io.github.jan-tennert.supabase:auth-kt")
-    implementation("io.github.jan-tennert.supabase:postgrest-kt")
+    // 🔥 Supabase (حل نهائي ثابت بدون BOM)
+    implementation("io.github.jan-tennert.supabase:auth-kt:2.6.1")
+    implementation("io.github.jan-tennert.supabase:postgrest-kt:2.6.1")
 
-    // HTTP client
+    // HTTP Client
     implementation("io.ktor:ktor-client-okhttp:2.3.7")
 
-    // JSON Serialization
+    // Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 
     // RecyclerView
