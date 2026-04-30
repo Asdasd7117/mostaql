@@ -40,7 +40,9 @@ android {
 
 dependencies {
 
-    // Android الأساسي
+    // =====================
+    // Android Core
+    // =====================
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
@@ -50,24 +52,28 @@ dependencies {
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
-    // =========================
-    // 🔥 SUPABASE (FIXED 3.6.0)
-    // =========================
-    implementation(platform("io.github.jan-tennert.supabase:bom:3.6.0"))
+    // =====================
+    // 🔥 SUPABASE (FIXED)
+    // =====================
+    implementation("io.github.jan-tennert.supabase:bom:3.6.0")
 
-    implementation("io.github.jan-tennert.supabase:auth-kt")
-    implementation("io.github.jan-tennert.supabase:postgrest-kt")
+    implementation("io.github.jan-tennert.supabase:auth-kt:3.6.0")
+    implementation("io.github.jan-tennert.supabase:postgrest-kt:3.6.0")
 
-    // Ktor (مهم لـ Supabase)
+    // =====================
+    // Network
+    // =====================
     implementation("io.ktor:ktor-client-okhttp:2.3.7")
 
-    // Serialization
+    // JSON
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 
     // RecyclerView
     implementation("androidx.recyclerview:recyclerview:1.3.2")
 
+    // =====================
     // Tests
+    // =====================
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
