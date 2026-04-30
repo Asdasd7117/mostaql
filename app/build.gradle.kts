@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.example.mostaql"
-    compileSdk = 36   // 🔥 أقل من 36 لتجنب مشاكل JStudio
+    compileSdk = 36   // ✔ خليته مثل ما طلبت
 
     defaultConfig {
         applicationId = "com.example.mostaql"
@@ -28,12 +28,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
 }
 
@@ -49,13 +49,11 @@ dependencies {
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
-    // 🔥 Supabase (نسخة مستقرة للهاتف)
-    implementation(platform("io.github.jan-tennert.supabase:bom:2.4.0"))
+    // 🔥 Supabase (ثابت بدون BOM)
+    implementation("io.github.jan-tennert.supabase:auth-kt:2.5.1")
+    implementation("io.github.jan-tennert.supabase:postgrest-kt:2.5.1")
 
-    implementation("io.github.jan-tennert.supabase:auth-kt")
-    implementation("io.github.jan-tennert.supabase:postgrest-kt")
-
-    // HTTP (أكثر توافق مع JStudio)
+    // HTTP
     implementation("io.ktor:ktor-client-okhttp:2.3.7")
 
     // Serialization
