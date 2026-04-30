@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.mostaql.R
 import com.example.mostaql.data.SupabaseClient
 import kotlinx.coroutines.launch
 
@@ -40,7 +41,7 @@ class VerifyOtpActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 try {
 
-                    // ✅ Supabase 3.6 OTP verify الصحيح
+                    // 🔥 Supabase OTP الصحيح
                     SupabaseClient.client.auth.verifyEmailOtp(
                         email = email,
                         token = code,
@@ -48,7 +49,6 @@ class VerifyOtpActivity : AppCompatActivity() {
                     )
 
                     Toast.makeText(this@VerifyOtpActivity, "تم التحقق بنجاح", Toast.LENGTH_SHORT).show()
-
                     finish()
 
                 } catch (e: Exception) {
