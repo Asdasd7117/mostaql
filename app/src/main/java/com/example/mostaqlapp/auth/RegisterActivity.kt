@@ -9,91 +9,65 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-// استيراد الموارد والبيانات بشكل مباشر وصحيح
-import com.example.mostaqlapp.R
-import com.example.mostaqlapp.data.SupabaseClient
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.Email
 import kotlinx.coroutines.launch
 
 class RegisterActivity : AppCompatActivity() {
 
-    // تعريف العناصر بناءً على IDs الموجودة في activity_register.xml
-    private lateinit var emailField: EditText
-    private lateinit var passwordField: EditText
-    private lateinit var confirmPasswordField: EditText
-    private lateinit var registerButton: Button
-    private lateinit var loadingBar: ProgressBar
-
+    // استخدام المسارات الكاملة لتجنب خطأ Unresolved reference R
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_register)
+        // ربط الواجهة باستخدام المسار الكامل لملف الـ R
+        setContentView(com.example.mostaqlapp.R.layout.activity_register)
 
-        // 1. ربط العناصر بالواجهة
-        setupViews()
+        val emailField = findViewById<EditText>(com.example.mostaqlapp.R.id.email)
+        val passwordField = findViewById<EditText>(com.example.mostaqlapp.R.id.password)
+        val confirmPasswordField = findViewById<EditText>(com.example.mostaqlapp.R.id.confirmPassword)
+        val registerButton = findViewById<Button>(com.example.mostaqlapp.R.id.registerBtn)
+        val loadingBar = findViewById<ProgressBar>(com.example.mostaqlapp.R.id.progressBar)
 
-        // 2. إعداد زر التسجيل
         registerButton.setOnClickListener {
-            performRegistration()
-        }
-    }
+            val emailText = emailField.text.toString().trim()
+            val passText = passwordField.text.toString().trim()
+            val confirmText = confirmPasswordField.text.toString().trim()
 
-    private fun setupViews() {
-        emailField = findViewById(R.id.email)
-        passwordField = findViewById(R.id.password)
-        confirmPasswordField = findViewById(R.id.confirmPassword)
-        registerButton = findViewById(R.id.registerBtn)
-        loadingBar = findViewById(R.id.progressBar)
-    }
+            if (emailText.isEmpty() || passText.isEmpty() || confirmText.isEmpty()) {
+                Toast.makeText(this, "يرجى ملء جميع الحقول", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
-    private fun performRegistration() {
-        val email = emailField.text.toString().trim()
-        val password = passwordField.text.toString().trim()
-        val confirmPassword = confirmPasswordField.text.toString().trim()
+            if (passText != confirmText) {
+                Toast.makeText(this, "كلمات المرور غير متطابقة", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
-        // التحقق من صحة البيانات
-        if (email.isEmpty() || password.isEmpty()) {
-            showError("يرجى ملء جميع الحقول")
-            return
-        }
+            loadingBar.visibility = View.VISIBLE
+            registerButton.isEnabled = false
 
-        if (password != confirmPassword) {
-            showError("كلمات المرور غير متطابقة")
-            return
-        }
+            lifecycleScope.launch {
+                try {
+                    // استخدام المسار الكامل لـ SupabaseClient لضمان الوصول إليه
+                    com.example.mostaqlapp.data.SupabaseClient.client.auth.signUpWith(Email) {
+                        email = emailText
+                        password = passText
+                    }
 
-        // بدء عملية التسجيل في Supabase
-        setLoadingState(true)
-        
-        lifecycleScope.launch {
-            try {
-                SupabaseClient.client.auth.signUpWith(Email) {
-                    this.email = email
-                    this.password = password
+                    Toast.makeText(this@RegisterActivity, "تم التسجيل! تفقد بريدك", Toast.LENGTH_LONG).show()
+
+                    // الانتقال لشاشة التحقق باستخدام المسار الكامل للكلاس
+                    val intent = Intent(this@RegisterActivity, com.example.mostaqlapp.auth.VerifyOtpActivity::class.java)
+                    intent.putExtra("email", emailText)
+                    startActivity(intent)
+                    finish()
+
+                } catch (e: Exception) {
+                    Toast.makeText(this@RegisterActivity, "خطأ: ${e.localizedMessage}", Toast.LENGTH_LONG).show()
+                } finally {
+                    loadingBar.visibility = View.GONE
+                    registerButton.isEnabled = true
                 }
-
-                showError("تم التسجيل بنجاح، يرجى التحقق من بريدك")
-                
-                // الانتقال لشاشة الـ OTP
-                val intent = Intent(this@RegisterActivity, VerifyOtpActivity::class.java)
-                intent.putExtra("email", email)
-                startActivity(intent)
-                finish()
-
-            } catch (e: Exception) {
-                showError("خطأ: ${e.localizedMessage}")
-            } finally {
-                setLoadingState(false)
             }
         }
-    }
-
-    private fun setLoadingState(isLoading: Boolean) {
-        loadingBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-        registerButton.isEnabled = !isLoading
-    }
-
-    private fun showError(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 }
