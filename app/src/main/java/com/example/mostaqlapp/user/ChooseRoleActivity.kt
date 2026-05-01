@@ -1,4 +1,4 @@
-package com.example.mostaqlapp.user // ✅ تم التصحيح ليطابق المسار الفعلي
+package com.example.mostaqlapp.user
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,6 +6,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+// استيراد الـ R واللوجن لضمان الربط بين المجلدات
+import com.example.mostaqlapp.R
+import com.example.mostaqlapp.auth.LoginActivity
 
 class ChooseRoleActivity : AppCompatActivity() {
 
@@ -15,37 +18,38 @@ class ChooseRoleActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // 🛠️ استخدام المسار الكامل للـ R لحل مشكلة Unresolved reference
-        setContentView(com.example.mostaqlapp.R.layout.activity_choose_role)
+        // ربط واجهة اختيار الدور
+        setContentView(R.layout.activity_choose_role)
 
-        // 🔗 ربط العناصر باستخدام المسارات الكاملة لـ IDs
-        nameInput = findViewById(com.example.mostaqlapp.R.id.name)
-        buyerBtn = findViewById(com.example.mostaqlapp.R.id.buyerBtn)
-        sellerBtn = findViewById(com.example.mostaqlapp.R.id.sellerBtn)
+        // 1. تعريف العناصر من الـ XML
+        nameInput = findViewById(R.id.name)
+        buyerBtn = findViewById(R.id.buyerBtn)
+        sellerBtn = findViewById(R.id.sellerBtn)
 
-        // 🟦 اختيار دور: مشتري
+        // 2. منطق زر المشتري
         buyerBtn.setOnClickListener {
-            handleRoleSelection("مشتري")
+            handleSelection("مشتري")
         }
 
-        // 🟩 اختيار دور: بائع
+        // 3. منطق زر البائع
         sellerBtn.setOnClickListener {
-            handleRoleSelection("بائع")
+            handleSelection("بائع")
         }
     }
 
-    private fun handleRoleSelection(role: String) {
+    private fun handleSelection(role: String) {
         val name = nameInput.text.toString().trim()
 
         if (name.isEmpty()) {
-            Toast.makeText(this, "اكتب اسمك أولاً", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "من فضلك اكتب اسمك أولاً", Toast.LENGTH_SHORT).show()
             return
         }
 
-        Toast.makeText(this, "مرحباً بك كـ $role: $name", Toast.LENGTH_SHORT).show()
+        // يمكنك هنا حفظ الاسم والدور في SharedPreferences إذا أردت لاحقاً
+        Toast.makeText(this, "مرحباً بك يا $name (دوران: $role)", Toast.LENGTH_SHORT).show()
 
-        // 🚀 استخدام المسار الكامل لـ LoginActivity لضمان وصول الـ Intent
-        val intent = Intent(this, com.example.mostaqlapp.auth.LoginActivity::class.java)
+        // الانتقال لشاشة تسجيل الدخول
+        val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
     }
 }
