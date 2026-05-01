@@ -2,6 +2,7 @@ package com.example.mostaql.auth
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -23,6 +24,7 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
+        // ربط العناصر بالواجهة
         email = findViewById(R.id.email)
         password = findViewById(R.id.password)
         confirmPassword = findViewById(R.id.confirmPassword)
@@ -35,6 +37,7 @@ class RegisterActivity : AppCompatActivity() {
             val passText = password.text.toString().trim()
             val confirmText = confirmPassword.text.toString().trim()
 
+            // التحقق من الحقول
             if (emailText.isEmpty() || passText.isEmpty() || confirmText.isEmpty()) {
                 Toast.makeText(this, "املأ جميع الحقول", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -50,13 +53,13 @@ class RegisterActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            progress.visibility = ProgressBar.VISIBLE
+            // إظهار التحميل وتعطيل الزر
+            progress.visibility = View.VISIBLE
             registerBtn.isEnabled = false
 
             lifecycleScope.launch {
                 try {
-
-                    // ✔️ تسجيل حساب (بدون OTP)
+                    // 1. تنفيذ عملية التسجيل في Supabase
                     SupabaseClient.client.auth.signUpWith(Email) {
                         email = emailText
                         password = passText
@@ -64,21 +67,28 @@ class RegisterActivity : AppCompatActivity() {
 
                     Toast.makeText(
                         this@RegisterActivity,
-                        "تم إنشاء الحساب بنجاح",
+                        "تم إنشاء الحساب، يرجى التحقق من بريدك",
                         Toast.LENGTH_LONG
                     ).show()
 
-                    // يرجع لصفحة الدخول
+                    // 2. 🔥 الانتقال لشاشة التحقق (VerifyOtpActivity)
+                    val intent = Intent(this@RegisterActivity, VerifyOtpActivity::class.java)
+                    // نمرر الإيميل لكي تستخدمه شاشة التحقق في طلب الـ OTP
+                    intent.putExtra("email", emailText) 
+                    startActivity(intent)
+
+                    // 3. إغلاق شاشة التسجيل
                     finish()
 
                 } catch (e: Exception) {
                     Toast.makeText(
                         this@RegisterActivity,
-                        "خطأ: ${e.message}",
+                        "خطأ: ${e.localizedMessage}",
                         Toast.LENGTH_LONG
                     ).show()
                 } finally {
-                    progress.visibility = ProgressBar.GONE
+                    // إخفاء التحميل وإعادة تفعيل الزر في كل الأحوال
+                    progress.visibility = View.GONE
                     registerBtn.isEnabled = true
                 }
             }
