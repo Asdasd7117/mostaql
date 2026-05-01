@@ -5,7 +5,7 @@ import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.postgrest.Postgrest
 
-object SupabaseClientProvider {
+object SupabaseClient {
 
     val client: SupabaseClient = createSupabaseClient(
         supabaseUrl = "https://ojposlwuwtvzypgpdemm.supabase.co",
