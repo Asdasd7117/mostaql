@@ -11,8 +11,6 @@ import com.example.mostaql.user.ChooseRoleActivity
 import io.github.jan.supabase.auth.providers.builtin.Email
 import kotlinx.coroutines.launch
 import io.github.jan.supabase.auth.auth
-com.example.mostaqlapp.auth.RegisterActivity
-class LoginActivity : AppCompatActivity() {
 
     private lateinit var email: EditText
     private lateinit var pass: EditText
