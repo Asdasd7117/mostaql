@@ -13,39 +13,38 @@ import io.github.jan.supabase.auth.providers.builtin.Email
 import kotlinx.coroutines.launch
 
 class RegisterActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
-        val emailField = findViewById<EditText>(R.id.email)
-        val passField = findViewById<EditText>(R.id.password)
-        val confirmPassField = findViewById<EditText>(R.id.confirmPassword)
-        val registerBtn = findViewById<Button>(R.id.registerBtn)
-        val progress = findViewById<ProgressBar>(R.id.progressBar)
+        val emailIn = findViewById<EditText>(R.id.email)
+        val passIn = findViewById<EditText>(R.id.password)
+        val confirmIn = findViewById<EditText>(R.id.confirmPassword)
+        val btn = findViewById<Button>(R.id.registerBtn)
+        val loader = findViewById<ProgressBar>(R.id.progressBar)
 
-        registerBtn.setOnClickListener {
-            val emailText = emailField.text.toString().trim()
-            val passText = passField.text.toString().trim()
-            val confirmText = confirmPassField.text.toString().trim()
-
-            if (passText != confirmText) {
+        btn.setOnClickListener {
+            val m = emailIn.text.toString().trim()
+            val p = passIn.text.toString().trim()
+            if (p != confirmIn.text.toString().trim()) {
                 Toast.makeText(this, "كلمات المرور غير متطابقة", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            progress.visibility = View.VISIBLE
+            loader.visibility = View.VISIBLE
             lifecycleScope.launch {
                 try {
                     SupabaseClient.client.auth.signUpWith(Email) {
-                        email = emailText
-                        password = passText
+                        email = m
+                        password = p
                     }
-                    Toast.makeText(this@RegisterActivity, "تم التسجيل بنجاح", Toast.LENGTH_SHORT).show()
-                    finish() // العودة لشاشة اللوجن
+                    Toast.makeText(this@RegisterActivity, "تم بنجاح", Toast.LENGTH_SHORT).show()
+                    finish()
                 } catch (e: Exception) {
-                    Toast.makeText(this@RegisterActivity, "خطأ: ${e.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@RegisterActivity, e.message, Toast.LENGTH_SHORT).show()
                 } finally {
-                    progress.visibility = View.GONE
+                    loader.visibility = View.GONE
                 }
             }
         }
