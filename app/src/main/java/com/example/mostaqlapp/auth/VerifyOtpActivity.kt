@@ -44,7 +44,6 @@ class VerifyOtpActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 try {
 
-                    // ✅ التصحيح هنا
                     SupabaseClient.client.auth.verifyEmailOtp(
                         type = OtpType.Email,
                         email = email,
