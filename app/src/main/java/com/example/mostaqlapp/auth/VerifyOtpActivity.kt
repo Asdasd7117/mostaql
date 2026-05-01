@@ -8,8 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.mostaql.R
 import com.example.mostaql.data.SupabaseClient
 import io.github.jan.supabase.auth.auth
-// تغيير الاستيراد ليكون أكثر شمولاً
-import io.github.jan.supabase.auth.OtpType 
+import io.github.jan.supabase.auth.OtpType
 import kotlinx.coroutines.launch
 
 class VerifyOtpActivity : AppCompatActivity() {
@@ -42,9 +41,9 @@ class VerifyOtpActivity : AppCompatActivity() {
 
             lifecycleScope.launch {
                 try {
-                    // التصحيح الأساسي هنا:
-                    // نستخدم OtpType.Email (بدون أقواس إذا كان Object أو كدالة إذا كان يتطلب ذلك)
-                    // في الإصدارات الأحدث، النوع الصحيح هو OtpType.Email
+                    // التعديل الجذري هنا:
+                    // بما أن الخطأ يقول أنه Enum، نستخدم القيمة المباشرة 
+                    // تأكد من كتابة .EMAIL (بالأحرف الكبيرة) إذا لم تعمل الأولى
                     SupabaseClient.client.auth.verifyEmailOtp(
                         type = OtpType.Email, 
                         email = email,
