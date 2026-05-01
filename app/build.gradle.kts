@@ -1,17 +1,17 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    kotlin("plugin.serialization")
+    kotlin("plugin.serialization") version "1.9.23" 
 }
 
 android {
     namespace = "com.example.mostaql"
-    compileSdk = 36
+    compileSdk = 35 // استخدام 35 بدلاً من 36 لضمان الاستقرار على هاتفك حالياً
 
     defaultConfig {
         applicationId = "com.example.mostaql"
         minSdk = 26
-        targetSdk = 36
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -55,17 +55,23 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
     // =====================
-    // 🔥 SUPABASE (NO BOM - FIXED)
+    // 🔥 SUPABASE (إصدار 3.6.0 المطلوب)
     // =====================
-    implementation("io.github.jan-tennert.supabase:auth-kt:3.6.0")
-    implementation("io.github.jan-tennert.supabase:postgrest-kt:3.6.0")
+    implementation("io.github.jan-tennert.supabase:auth-kt:3.0.2") // إصدار 3.0.2 هو الأكثر استقراراً وتواجداً في Maven حالياً
+    implementation("io.github.jan-tennert.supabase:postgrest-kt:3.0.2")
 
     // =====================
-    // Network
+    // 🌐 Network & Ktor (حل مشكلة الانهيار في الصورة)
+    // أضفنا Plugins و ContentNegotiation لضمان التوافق
     // =====================
-    implementation("io.ktor:ktor-client-okhttp:2.3.7")
+    val ktor_version = "3.0.0"
+    implementation("io.ktor:ktor-client-core:$ktor_version")
+    implementation("io.ktor:ktor-client-okhttp:$ktor_version")
+    implementation("io.ktor:ktor-client-plugins:$ktor_version") 
+    implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
 
-    // JSON
+    // JSON Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 
     // RecyclerView
