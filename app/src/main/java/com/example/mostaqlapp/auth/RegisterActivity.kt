@@ -9,7 +9,6 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-// استيراد المكونات الأساسية لـ Supabase
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.Email
 import kotlinx.coroutines.launch
@@ -18,11 +17,9 @@ class RegisterActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
-        // استخدام المسار البرمجي المباشر للـ Layout لضمان عدم حدوث Unresolved reference R
+        // المسار الكامل لحل مشكلة R
         setContentView(com.example.mostaqlapp.R.layout.activity_register)
 
-        // تعريف العناصر باستخدام IDs الموضحة في ملفات الـ XML الخاصة بك
         val emailField = findViewById<EditText>(com.example.mostaqlapp.R.id.email)
         val passwordField = findViewById<EditText>(com.example.mostaqlapp.R.id.password)
         val confirmPasswordField = findViewById<EditText>(com.example.mostaqlapp.R.id.confirmPassword)
@@ -35,7 +32,7 @@ class RegisterActivity : AppCompatActivity() {
             val confirmText = confirmPasswordField.text.toString().trim()
 
             if (emailText.isEmpty() || passText.isEmpty() || confirmText.isEmpty()) {
-                Toast.makeText(this, "املأ جميع الحقول", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "يرجى ملء الحقول", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -49,15 +46,14 @@ class RegisterActivity : AppCompatActivity() {
 
             lifecycleScope.launch {
                 try {
-                    // الوصول المباشر لكلاس SupabaseClient عبر مساره الكامل في مجلد data
+                    // المسار الكامل لـ SupabaseClient
                     com.example.mostaqlapp.data.SupabaseClient.client.auth.signUpWith(Email) {
                         email = emailText
                         password = passText
                     }
 
-                    Toast.makeText(this@RegisterActivity, "تم إرسال رمز التحقق لهاتفك/بريدك", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@RegisterActivity, "تم إنشاء الحساب بنجاح", Toast.LENGTH_LONG).show()
 
-                    // الانتقال لشاشة التحقق المكتشفة في مجلد auth
                     val intent = Intent(this@RegisterActivity, VerifyOtpActivity::class.java)
                     intent.putExtra("email", emailText)
                     startActivity(intent)
