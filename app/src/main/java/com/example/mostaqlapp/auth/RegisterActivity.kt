@@ -14,10 +14,9 @@ import io.github.jan.supabase.auth.providers.builtin.Email
 import kotlinx.coroutines.launch
 
 class RegisterActivity : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // المسار الكامل لحل مشكلة R
+        // ربط مباشر بملف الـ R لإنهاء مشكلة Unresolved reference
         setContentView(com.example.mostaqlapp.R.layout.activity_register)
 
         val emailField = findViewById<EditText>(com.example.mostaqlapp.R.id.email)
@@ -32,12 +31,7 @@ class RegisterActivity : AppCompatActivity() {
             val confirmText = confirmPasswordField.text.toString().trim()
 
             if (emailText.isEmpty() || passText.isEmpty() || confirmText.isEmpty()) {
-                Toast.makeText(this, "يرجى ملء الحقول", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            if (passText != confirmText) {
-                Toast.makeText(this, "كلمة المرور غير متطابقة", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "املأ البيانات", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -46,19 +40,15 @@ class RegisterActivity : AppCompatActivity() {
 
             lifecycleScope.launch {
                 try {
-                    // المسار الكامل لـ SupabaseClient
+                    // مسار كامل لكلاس البيانات
                     com.example.mostaqlapp.data.SupabaseClient.client.auth.signUpWith(Email) {
                         email = emailText
                         password = passText
                     }
-
-                    Toast.makeText(this@RegisterActivity, "تم إنشاء الحساب بنجاح", Toast.LENGTH_LONG).show()
-
-                    val intent = Intent(this@RegisterActivity, VerifyOtpActivity::class.java)
+                    val intent = Intent(this@RegisterActivity, com.example.mostaqlapp.auth.VerifyOtpActivity::class.java)
                     intent.putExtra("email", emailText)
                     startActivity(intent)
                     finish()
-
                 } catch (e: Exception) {
                     Toast.makeText(this@RegisterActivity, "خطأ: ${e.localizedMessage}", Toast.LENGTH_LONG).show()
                 } finally {
