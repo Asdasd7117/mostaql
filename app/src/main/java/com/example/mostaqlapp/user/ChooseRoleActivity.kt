@@ -1,4 +1,4 @@
-package com.example.mostaql.user
+package com.example.mostaqlapp.user // ✅ تم التصحيح ليطابق المسار الفعلي
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,8 +6,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.mostaql.R
-import com.example.mostaql.auth.LoginActivity
 
 class ChooseRoleActivity : AppCompatActivity() {
 
@@ -17,43 +15,37 @@ class ChooseRoleActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_choose_role)
+        // 🛠️ استخدام المسار الكامل للـ R لحل مشكلة Unresolved reference
+        setContentView(com.example.mostaqlapp.R.layout.activity_choose_role)
 
-        // 🔗 ربط العناصر حسب XML الحقيقي
-        nameInput = findViewById(R.id.name)
-        buyerBtn = findViewById(R.id.buyerBtn)
-        sellerBtn = findViewById(R.id.sellerBtn)
+        // 🔗 ربط العناصر باستخدام المسارات الكاملة لـ IDs
+        nameInput = findViewById(com.example.mostaqlapp.R.id.name)
+        buyerBtn = findViewById(com.example.mostaqlapp.R.id.buyerBtn)
+        sellerBtn = findViewById(com.example.mostaqlapp.R.id.sellerBtn)
 
-        // 🟦 مشتري
+        // 🟦 اختيار دور: مشتري
         buyerBtn.setOnClickListener {
-            val name = nameInput.text.toString().trim()
-
-            if (name.isEmpty()) {
-                Toast.makeText(this, "اكتب اسمك أولاً", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            Toast.makeText(this, "مرحباً مشتري $name", Toast.LENGTH_SHORT).show()
-
-            startActivity(
-                Intent(this@ChooseRoleActivity, LoginActivity::class.java)
-            )
+            handleRoleSelection("مشتري")
         }
 
-        // 🟩 بائع
+        // 🟩 اختيار دور: بائع
         sellerBtn.setOnClickListener {
-            val name = nameInput.text.toString().trim()
-
-            if (name.isEmpty()) {
-                Toast.makeText(this, "اكتب اسمك أولاً", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            Toast.makeText(this, "مرحباً بائع $name", Toast.LENGTH_SHORT).show()
-
-            startActivity(
-                Intent(this@ChooseRoleActivity, LoginActivity::class.java)
-            )
+            handleRoleSelection("بائع")
         }
+    }
+
+    private fun handleRoleSelection(role: String) {
+        val name = nameInput.text.toString().trim()
+
+        if (name.isEmpty()) {
+            Toast.makeText(this, "اكتب اسمك أولاً", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        Toast.makeText(this, "مرحباً بك كـ $role: $name", Toast.LENGTH_SHORT).show()
+
+        // 🚀 استخدام المسار الكامل لـ LoginActivity لضمان وصول الـ Intent
+        val intent = Intent(this, com.example.mostaqlapp.auth.LoginActivity::class.java)
+        startActivity(intent)
     }
 }
