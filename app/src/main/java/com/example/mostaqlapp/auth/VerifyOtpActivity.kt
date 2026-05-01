@@ -41,12 +41,12 @@ class VerifyOtpActivity : AppCompatActivity() {
 
             lifecycleScope.launch {
                 try {
-                    /* المنطق الجديد: 
-                       استخدام verifyOtp مع تحديد المعاملات بشكل صريح.
-                       هذا المنطق يتجاوز مشكلة الـ Enum المعقدة في الإصدارات الأخيرة.
+                    /* الحل النهائي بناءً على أخطاء المترجم:
+                       بما أن OtpType.Email هي Enum، يجب الوصول للقيمة الثابتة داخلها.
+                       إصدارات Supabase kt غالباً تستخدم EMAIL بحروف كبيرة كعنصر داخل الـ Enum.
                     */
-                    SupabaseClient.client.auth.verifyOtp(
-                        type = OtpType.Email(), // استخدام الـ constructor كـ Object
+                    SupabaseClient.client.auth.verifyEmailOtp(
+                        type = OtpType.Email.EMAIL, 
                         email = email,
                         token = code
                     )
