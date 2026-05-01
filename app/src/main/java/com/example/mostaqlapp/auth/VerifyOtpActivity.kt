@@ -1,4 +1,4 @@
-package com.example.mostaql.auth
+package com.example.mostaqlapp.auth
 
 import android.os.Bundle
 import android.view.View
@@ -41,11 +41,12 @@ class VerifyOtpActivity : AppCompatActivity() {
 
             lifecycleScope.launch {
                 try {
-                    // التعديل الجذري هنا:
-                    // بما أن الخطأ يقول أنه Enum، نستخدم القيمة المباشرة 
-                    // تأكد من كتابة .EMAIL (بالأحرف الكبيرة) إذا لم تعمل الأولى
-                    SupabaseClient.client.auth.verifyEmailOtp(
-                        type = OtpType.Email, 
+                    /* المنطق الجديد: 
+                       استخدام verifyOtp مع تحديد المعاملات بشكل صريح.
+                       هذا المنطق يتجاوز مشكلة الـ Enum المعقدة في الإصدارات الأخيرة.
+                    */
+                    SupabaseClient.client.auth.verifyOtp(
+                        type = OtpType.Email(), // استخدام الـ constructor كـ Object
                         email = email,
                         token = code
                     )
