@@ -14,35 +14,42 @@ import io.github.jan.supabase.auth.providers.builtin.Email
 import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
+
+    private lateinit var emailField: EditText
+    private lateinit var passField: EditText
+    private lateinit var loginBtn: Button
+    private lateinit var registerBtn: Button
+    private lateinit var progressBar: ProgressBar
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        val emailField = findViewById<EditText>(R.id.email)
-        val passField = findViewById<EditText>(R.id.password)
-        val loginBtn = findViewById<Button>(R.id.loginBtn)
-        val registerBtn = findViewById<Button>(R.id.btnGoToRegister)
-        val progress = findViewById<ProgressBar>(R.id.progressBar)
+        emailField = findViewById(R.id.email)
+        passField = findViewById(R.id.password)
+        loginBtn = findViewById(R.id.loginBtn)
+        registerBtn = findViewById(R.id.btnGoToRegister)
+        progressBar = findViewById(R.id.progressBar)
 
         loginBtn.setOnClickListener {
-            val emailText = emailField.text.toString().trim()
-            val passText = passField.text.toString().trim()
+            val mail = emailField.text.toString().trim()
+            val pw = passField.text.toString().trim()
 
-            if (emailText.isEmpty() || passText.isEmpty()) return@setOnClickListener
+            if (mail.isEmpty() || pw.isEmpty()) return@setOnClickListener
 
-            progress.visibility = View.VISIBLE
+            progressBar.visibility = View.VISIBLE
             lifecycleScope.launch {
                 try {
                     SupabaseClient.client.auth.signInWith(Email) {
-                        email = emailText
-                        password = passText
+                        email = mail
+                        password = pw
                     }
                     startActivity(Intent(this@LoginActivity, ChooseRoleActivity::class.java))
                     finish()
                 } catch (e: Exception) {
                     Toast.makeText(this@LoginActivity, "خطأ: ${e.message}", Toast.LENGTH_SHORT).show()
                 } finally {
-                    progress.visibility = View.GONE
+                    progressBar.visibility = View.GONE
                 }
             }
         }
