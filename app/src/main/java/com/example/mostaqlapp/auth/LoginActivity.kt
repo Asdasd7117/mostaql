@@ -6,6 +6,9 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.mostaqlapp.R
+import com.example.mostaqlapp.data.SupabaseClient
+import com.example.mostaqlapp.user.ChooseRoleActivity
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.Email
 import kotlinx.coroutines.launch
@@ -13,13 +16,13 @@ import kotlinx.coroutines.launch
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(com.example.mostaqlapp.R.layout.activity_login)
+        setContentView(R.layout.activity_login)
 
-        val emailField = findViewById<EditText>(com.example.mostaqlapp.R.id.email)
-        val passField = findViewById<EditText>(com.example.mostaqlapp.R.id.password)
-        val loginBtn = findViewById<Button>(com.example.mostaqlapp.R.id.loginBtn)
-        val registerBtn = findViewById<Button>(com.example.mostaqlapp.R.id.btnGoToRegister)
-        val progress = findViewById<ProgressBar>(com.example.mostaqlapp.R.id.progressBar)
+        val emailField = findViewById<EditText>(R.id.email)
+        val passField = findViewById<EditText>(R.id.password)
+        val loginBtn = findViewById<Button>(R.id.loginBtn)
+        val registerBtn = findViewById<Button>(R.id.btnGoToRegister)
+        val progress = findViewById<ProgressBar>(R.id.progressBar)
 
         loginBtn.setOnClickListener {
             val emailText = emailField.text.toString().trim()
@@ -30,16 +33,14 @@ class LoginActivity : AppCompatActivity() {
             progress.visibility = View.VISIBLE
             lifecycleScope.launch {
                 try {
-                    // مسار كامل لكلاس البيانات
-                    com.example.mostaqlapp.data.SupabaseClient.client.auth.signInWith(Email) {
+                    SupabaseClient.client.auth.signInWith(Email) {
                         email = emailText
                         password = passText
                     }
-                    // مسار كامل للانتقال لشاشة الأدوار
-                    startActivity(Intent(this@LoginActivity, com.example.mostaqlapp.user.ChooseRoleActivity::class.java))
+                    startActivity(Intent(this@LoginActivity, ChooseRoleActivity::class.java))
                     finish()
                 } catch (e: Exception) {
-                    Toast.makeText(this@LoginActivity, e.message, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@LoginActivity, "خطأ: ${e.message}", Toast.LENGTH_SHORT).show()
                 } finally {
                     progress.visibility = View.GONE
                 }
@@ -47,7 +48,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         registerBtn.setOnClickListener {
-            startActivity(Intent(this, com.example.mostaqlapp.auth.RegisterActivity::class.java))
+            startActivity(Intent(this, RegisterActivity::class.java))
         }
     }
 }
