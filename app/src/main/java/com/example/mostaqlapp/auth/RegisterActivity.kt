@@ -6,7 +6,9 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.example.mostaqlapp.R
+// استيراد ملف الـ R الصحيح (تأكد أن هذا هو اسم الـ package في build.gradle)
+import com.example.mostaqlapp.R 
+// استيراد كلاس SupabaseClient (تأكد من المسار)
 import com.example.mostaqlapp.data.SupabaseClient
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.Email
@@ -50,15 +52,15 @@ class RegisterActivity : AppCompatActivity() {
 
             lifecycleScope.launch {
                 try {
-                    // التسجيل في Supabase
+                    // استخدام الـ Client من المسار الصحيح
                     SupabaseClient.client.auth.signUpWith(Email) {
                         email = emailText
                         password = passText
                     }
 
-                    Toast.makeText(this@RegisterActivity, "تم إرسال رمز التحقق", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@RegisterActivity, "تم إنشاء الحساب بنجاح", Toast.LENGTH_SHORT).show()
 
-                    // 🔥 هنا التعديل: نستخدم الاسم كاملاً لضمان التعرف عليه
+                    // الانتقال لشاشة التحقق
                     val intent = Intent(this@RegisterActivity, VerifyOtpActivity::class.java)
                     intent.putExtra("email", emailText)
                     startActivity(intent)
