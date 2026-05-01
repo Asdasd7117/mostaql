@@ -9,18 +9,20 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+// استيراد المكونات الأساسية لـ Supabase
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.Email
 import kotlinx.coroutines.launch
 
 class RegisterActivity : AppCompatActivity() {
 
-    // استخدام المسارات الكاملة لتجنب خطأ Unresolved reference R
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // ربط الواجهة باستخدام المسار الكامل لملف الـ R
+        
+        // استخدام المسار البرمجي المباشر للـ Layout لضمان عدم حدوث Unresolved reference R
         setContentView(com.example.mostaqlapp.R.layout.activity_register)
 
+        // تعريف العناصر باستخدام IDs الموضحة في ملفات الـ XML الخاصة بك
         val emailField = findViewById<EditText>(com.example.mostaqlapp.R.id.email)
         val passwordField = findViewById<EditText>(com.example.mostaqlapp.R.id.password)
         val confirmPasswordField = findViewById<EditText>(com.example.mostaqlapp.R.id.confirmPassword)
@@ -33,12 +35,12 @@ class RegisterActivity : AppCompatActivity() {
             val confirmText = confirmPasswordField.text.toString().trim()
 
             if (emailText.isEmpty() || passText.isEmpty() || confirmText.isEmpty()) {
-                Toast.makeText(this, "يرجى ملء جميع الحقول", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "املأ جميع الحقول", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             if (passText != confirmText) {
-                Toast.makeText(this, "كلمات المرور غير متطابقة", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "كلمة المرور غير متطابقة", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -47,16 +49,16 @@ class RegisterActivity : AppCompatActivity() {
 
             lifecycleScope.launch {
                 try {
-                    // استخدام المسار الكامل لـ SupabaseClient لضمان الوصول إليه
+                    // الوصول المباشر لكلاس SupabaseClient عبر مساره الكامل في مجلد data
                     com.example.mostaqlapp.data.SupabaseClient.client.auth.signUpWith(Email) {
                         email = emailText
                         password = passText
                     }
 
-                    Toast.makeText(this@RegisterActivity, "تم التسجيل! تفقد بريدك", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@RegisterActivity, "تم إرسال رمز التحقق لهاتفك/بريدك", Toast.LENGTH_LONG).show()
 
-                    // الانتقال لشاشة التحقق باستخدام المسار الكامل للكلاس
-                    val intent = Intent(this@RegisterActivity, com.example.mostaqlapp.auth.VerifyOtpActivity::class.java)
+                    // الانتقال لشاشة التحقق المكتشفة في مجلد auth
+                    val intent = Intent(this@RegisterActivity, VerifyOtpActivity::class.java)
                     intent.putExtra("email", emailText)
                     startActivity(intent)
                     finish()
