@@ -1,16 +1,19 @@
-package com.example.mostaql.auth
+package com.example.mostaqlapp.auth
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.example.mostaql.R
-import com.example.mostaql.data.SupabaseClient
-import com.example.mostaql.user.ChooseRoleActivity
+import com.example.mostaqlapp.R
+import com.example.mostaqlapp.data.SupabaseClient
+import com.example.mostaqlapp.user.ChooseRoleActivity
+import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.Email
 import kotlinx.coroutines.launch
-import io.github.jan.supabase.auth.auth
+
+class LoginActivity : AppCompatActivity() {
 
     private lateinit var email: EditText
     private lateinit var pass: EditText
@@ -22,22 +25,19 @@ import io.github.jan.supabase.auth.auth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // ربط التصميم XML
+        // 1. ربط التصميم XML
         setContentView(R.layout.activity_login)
 
-        // ربط العناصر
+        // 2. ربط العناصر
         email = findViewById(R.id.email)
         pass = findViewById(R.id.password)
         loginBtn = findViewById(R.id.loginBtn)
         forgotBtn = findViewById(R.id.forgotBtn)
-        registerBtn = findViewById(R.id.registerBtn)
-
-        // (اختياري) لو أضفت ProgressBar في XML
+        registerBtn = findViewById(R.id.btnGoToRegister) // تأكد من الـ ID في XML
         progress = findViewById(R.id.progressBar)
 
-        // تسجيل الدخول
+        // 3. زر تسجيل الدخول
         loginBtn.setOnClickListener {
-
             val emailText = email.text.toString().trim()
             val passText = pass.text.toString().trim()
 
@@ -46,7 +46,7 @@ import io.github.jan.supabase.auth.auth
                 return@setOnClickListener
             }
 
-            progress.visibility = ProgressBar.VISIBLE
+            progress.visibility = View.VISIBLE
             loginBtn.isEnabled = false
 
             lifecycleScope.launch {
@@ -57,31 +57,28 @@ import io.github.jan.supabase.auth.auth
                     }
 
                     Toast.makeText(this@LoginActivity, "تم تسجيل الدخول", Toast.LENGTH_SHORT).show()
-
                     startActivity(Intent(this@LoginActivity, ChooseRoleActivity::class.java))
                     finish()
 
                 } catch (e: Exception) {
-                    Toast.makeText(
-                        this@LoginActivity,
-                        "فشل الدخول: ${e.message}",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    Toast.makeText(this@LoginActivity, "خطأ: ${e.message}", Toast.LENGTH_LONG).show()
                 } finally {
-                    progress.visibility = ProgressBar.GONE
+                    progress.visibility = View.GONE
                     loginBtn.isEnabled = true
                 }
             }
         }
 
-        // نسيت كلمة المرور
-        forgotBtn.setOnClickListener {
-            startActivity(Intent(this, ForgotPasswordActivity::class.java))
-        }
-
-        // إنشاء حساب
+        // 4. الانتقال لإنشاء حساب
         registerBtn.setOnClickListener {
-            startActivity(Intent(this, RegisterActivity::class.java))
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
+        }
+        
+        // 5. زر نسيت كلمة المرور (تأكد من وجود الملف أو احذفه إذا لم يكن جاهزاً)
+        forgotBtn.setOnClickListener {
+            // startActivity(Intent(this, ForgotPasswordActivity::class.java))
+            Toast.makeText(this, "قريباً...", Toast.LENGTH_SHORT).show()
         }
     }
 }
