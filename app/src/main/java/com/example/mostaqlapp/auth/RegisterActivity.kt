@@ -6,6 +6,8 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.mostaqlapp.R
+import com.example.mostaqlapp.data.SupabaseClient
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.Email
 import kotlinx.coroutines.launch
@@ -13,25 +15,37 @@ import kotlinx.coroutines.launch
 class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(com.example.mostaqlapp.R.layout.activity_register)
+        setContentView(R.layout.activity_register)
 
-        val emailField = findViewById<EditText>(com.example.mostaqlapp.R.id.email)
-        val passField = findViewById<EditText>(com.example.mostaqlapp.R.id.password)
-        val regBtn = findViewById<Button>(com.example.mostaqlapp.R.id.registerBtn)
+        val emailField = findViewById<EditText>(R.id.email)
+        val passField = findViewById<EditText>(R.id.password)
+        val confirmPassField = findViewById<EditText>(R.id.confirmPassword)
+        val registerBtn = findViewById<Button>(R.id.registerBtn)
+        val progress = findViewById<ProgressBar>(R.id.progressBar)
 
-        regBtn.setOnClickListener {
+        registerBtn.setOnClickListener {
             val emailText = emailField.text.toString().trim()
             val passText = passField.text.toString().trim()
+            val confirmText = confirmPassField.text.toString().trim()
 
+            if (passText != confirmText) {
+                Toast.makeText(this, "كلمات المرور غير متطابقة", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            progress.visibility = View.VISIBLE
             lifecycleScope.launch {
                 try {
-                    com.example.mostaqlapp.data.SupabaseClient.client.auth.signUpWith(Email) {
+                    SupabaseClient.client.auth.signUpWith(Email) {
                         email = emailText
                         password = passText
                     }
-                    startActivity(Intent(this@RegisterActivity, com.example.mostaqlapp.auth.VerifyOtpActivity::class.java))
+                    Toast.makeText(this@RegisterActivity, "تم التسجيل بنجاح", Toast.LENGTH_SHORT).show()
+                    finish() // العودة لشاشة اللوجن
                 } catch (e: Exception) {
-                    Toast.makeText(this@RegisterActivity, e.message, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@RegisterActivity, "خطأ: ${e.message}", Toast.LENGTH_SHORT).show()
+                } finally {
+                    progress.visibility = View.GONE
                 }
             }
         }
