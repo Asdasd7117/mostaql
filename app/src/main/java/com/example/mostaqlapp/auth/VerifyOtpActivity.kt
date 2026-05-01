@@ -1,15 +1,13 @@
-package com.example.mostaqlapp.auth
+package com.example.mostaql.auth
 
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ProgressBar
-import android.widget.Toast
+import android.view.View
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.example.mostaqlapp.data.SupabaseClient
-import io.github.jan.supabase.auth.auth
-import io.github.jan.supabase.auth.otp.OtpType
+import com.example.mostaql.R
+import com.example.mostaql.data.SupabaseClient
+import io.github.jan.supabase.auth.providers.builtin.Email
 import kotlinx.coroutines.launch
 
 class VerifyOtpActivity : AppCompatActivity() {
@@ -17,6 +15,7 @@ class VerifyOtpActivity : AppCompatActivity() {
     private lateinit var codeInput: EditText
     private lateinit var verifyBtn: Button
     private lateinit var progress: ProgressBar
+
     private lateinit var email: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +29,7 @@ class VerifyOtpActivity : AppCompatActivity() {
         email = intent.getStringExtra("email") ?: ""
 
         verifyBtn.setOnClickListener {
+
             val code = codeInput.text.toString().trim()
 
             if (code.isEmpty()) {
@@ -37,32 +37,25 @@ class VerifyOtpActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            progress.visibility = ProgressBar.VISIBLE
+            progress.visibility = View.VISIBLE
             verifyBtn.isEnabled = false
 
             lifecycleScope.launch {
                 try {
-                    SupabaseClient.instance.auth.verifyEmailOtp(
-                        type = OtpType.Email.EMAIL,
+
+                    SupabaseClient.client.auth.verifyEmailOtp(
+                        type = Email,
                         email = email,
                         token = code
                     )
 
-                    Toast.makeText(
-                        this@VerifyOtpActivity,
-                        "تم التحقق بنجاح",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Toast.makeText(this@VerifyOtpActivity, "تم التحقق بنجاح", Toast.LENGTH_SHORT).show()
                     finish()
 
                 } catch (e: Exception) {
-                    Toast.makeText(
-                        this@VerifyOtpActivity,
-                        "خطأ: ${e.message}",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    Toast.makeText(this@VerifyOtpActivity, "خطأ: ${e.message}", Toast.LENGTH_LONG).show()
                 } finally {
-                    progress.visibility = ProgressBar.GONE
+                    progress.visibility = View.GONE
                     verifyBtn.isEnabled = true
                 }
             }
