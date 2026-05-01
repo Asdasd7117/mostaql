@@ -3,12 +3,14 @@ package com.example.mostaqlapp.auth
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-// الربط الصحيح مع الموارد والبيانات
+// استيراد الموارد والبيانات بشكل مباشر وصحيح
 import com.example.mostaqlapp.R
-import com.example.mostaqlapp.databinding.ActivityRegisterBinding // إذا كنت تستخدم ViewBinding
 import com.example.mostaqlapp.data.SupabaseClient
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.Email
@@ -16,27 +18,27 @@ import kotlinx.coroutines.launch
 
 class RegisterActivity : AppCompatActivity() {
 
-    // استخدام أسماء واضحة للمكونات لتطابق الـ XML
-    private lateinit var emailField: android.widget.EditText
-    private lateinit var passwordField: android.widget.EditText
-    private lateinit var confirmPasswordField: android.widget.EditText
-    private lateinit var registerButton: android.widget.Button
-    private lateinit var loadingBar: android.widget.ProgressBar
+    // تعريف العناصر بناءً على IDs الموجودة في activity_register.xml
+    private lateinit var emailField: EditText
+    private lateinit var passwordField: EditText
+    private lateinit var confirmPasswordField: EditText
+    private lateinit var registerButton: Button
+    private lateinit var loadingBar: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
-        // 1. ربط العناصر (Initialization)
-        initViews()
+        // 1. ربط العناصر بالواجهة
+        setupViews()
 
-        // 2. إعداد المستمعات (Listeners)
+        // 2. إعداد زر التسجيل
         registerButton.setOnClickListener {
-            handleRegistration()
+            performRegistration()
         }
     }
 
-    private fun initViews() {
+    private fun setupViews() {
         emailField = findViewById(R.id.email)
         passwordField = findViewById(R.id.password)
         confirmPasswordField = findViewById(R.id.confirmPassword)
@@ -44,68 +46,54 @@ class RegisterActivity : AppCompatActivity() {
         loadingBar = findViewById(R.id.progressBar)
     }
 
-    private fun handleRegistration() {
+    private fun performRegistration() {
         val email = emailField.text.toString().trim()
         val password = passwordField.text.toString().trim()
         val confirmPassword = confirmPasswordField.text.toString().trim()
 
-        // التحقق من المدخلات (Validation)
-        if (!isInputValid(email, password, confirmPassword)) return
+        // التحقق من صحة البيانات
+        if (email.isEmpty() || password.isEmpty()) {
+            showError("يرجى ملء جميع الحقول")
+            return
+        }
 
-        // بدء عملية التسجيل
-        toggleLoading(true)
+        if (password != confirmPassword) {
+            showError("كلمات المرور غير متطابقة")
+            return
+        }
+
+        // بدء عملية التسجيل في Supabase
+        setLoadingState(true)
         
         lifecycleScope.launch {
             try {
-                // تنفيذ التسجيل في Supabase
                 SupabaseClient.client.auth.signUpWith(Email) {
                     this.email = email
                     this.password = password
                 }
 
-                showToast("تم إنشاء الحساب، يرجى إدخال رمز التحقق")
-                navigateToVerifyOtp(email)
+                showError("تم التسجيل بنجاح، يرجى التحقق من بريدك")
+                
+                // الانتقال لشاشة الـ OTP
+                val intent = Intent(this@RegisterActivity, VerifyOtpActivity::class.java)
+                intent.putExtra("email", email)
+                startActivity(intent)
+                finish()
 
             } catch (e: Exception) {
-                showToast("خطأ: ${e.localizedMessage}")
+                showError("خطأ: ${e.localizedMessage}")
             } finally {
-                toggleLoading(false)
+                setLoadingState(false)
             }
         }
     }
 
-    private fun isInputValid(email: String, pass: String, confirm: String): Boolean {
-        return when {
-            email.isEmpty() || pass.isEmpty() -> {
-                showToast("يرجى ملء جميع الحقول")
-                false
-            }
-            pass != confirm -> {
-                showToast("كلمات المرور غير متطابقة")
-                false
-            }
-            pass.length < 6 -> {
-                showToast("كلمة المرور قصيرة جداً")
-                false
-            }
-            else -> true
-        }
-    }
-
-    private fun navigateToVerifyOtp(email: String) {
-        val intent = Intent(this, VerifyOtpActivity::class.java).apply {
-            putExtra("email", email)
-        }
-        startActivity(intent)
-        finish()
-    }
-
-    private fun toggleLoading(isLoading: Boolean) {
+    private fun setLoadingState(isLoading: Boolean) {
         loadingBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         registerButton.isEnabled = !isLoading
     }
 
-    private fun showToast(message: String) {
+    private fun showError(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 }
