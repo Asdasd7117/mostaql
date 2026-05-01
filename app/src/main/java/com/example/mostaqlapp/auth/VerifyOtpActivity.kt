@@ -1,11 +1,12 @@
-package com.example.mostaql.auth
+package com.example.mostaqlapp.auth  // ✅ 1. صحح الباكيج
 
 import android.os.Bundle
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.example.mostaql.data.SupabaseClientProvider
+import com.example.mostaqlapp.data.SupabaseClientProvider  // ✅ 2. صحح مسار الاستيراد
 import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.auth.otp.OtpType  // ✅ 3. أضف استيراد OtpType
 import kotlinx.coroutines.launch
 
 class VerifyOtpActivity : AppCompatActivity() {
@@ -13,12 +14,11 @@ class VerifyOtpActivity : AppCompatActivity() {
     private lateinit var codeInput: EditText
     private lateinit var verifyBtn: Button
     private lateinit var progress: ProgressBar
-
     private lateinit var email: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_verify_otp)
+        setContentView(R.layout.activity_verify_otp)  // ✅ R سيعمل بعد إصلاح الباكيج
 
         codeInput = findViewById(R.id.codeInput)
         verifyBtn = findViewById(R.id.verifyBtn)
@@ -27,7 +27,6 @@ class VerifyOtpActivity : AppCompatActivity() {
         email = intent.getStringExtra("email") ?: ""
 
         verifyBtn.setOnClickListener {
-
             val code = codeInput.text.toString().trim()
 
             if (code.isEmpty()) {
@@ -40,9 +39,9 @@ class VerifyOtpActivity : AppCompatActivity() {
 
             lifecycleScope.launch {
                 try {
-
-                    // ✅ OTP verification (Supabase 3.6)
+                    // ✅ 4. استدعاء صحيح لـ verifyEmailOtp
                     SupabaseClientProvider.client.auth.verifyEmailOtp(
+                        type = OtpType.Email.EMAIL,  // ✅ حدد النوع
                         email = email,
                         token = code
                     )
@@ -52,7 +51,6 @@ class VerifyOtpActivity : AppCompatActivity() {
                         "تم التحقق بنجاح",
                         Toast.LENGTH_SHORT
                     ).show()
-
                     finish()
 
                 } catch (e: Exception) {
