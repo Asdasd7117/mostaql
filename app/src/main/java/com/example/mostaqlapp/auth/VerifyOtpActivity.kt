@@ -1,12 +1,15 @@
-package com.example.mostaql.auth  // ✅ 1. Namespace موحد
+package com.example.mostaqlapp.auth
 
 import android.os.Bundle
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.example.mostaql.data.SupabaseClientProvider  // ✅ 2. مسار صحيح
+import com.example.mostaqlapp.data.SupabaseClient
 import io.github.jan.supabase.auth.auth
-import io.github.jan.supabase.auth.otp.OtpType  // ✅ 3. استيراد صحيح لـ 3.6.0
+import io.github.jan.supabase.auth.otp.OtpType
 import kotlinx.coroutines.launch
 
 class VerifyOtpActivity : AppCompatActivity() {
@@ -18,7 +21,7 @@ class VerifyOtpActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_verify_otp)  // ✅ سيعمل بعد توحيد الـ namespace
+        setContentView(R.layout.activity_verify_otp)
 
         codeInput = findViewById(R.id.codeInput)
         verifyBtn = findViewById(R.id.verifyBtn)
@@ -39,8 +42,7 @@ class VerifyOtpActivity : AppCompatActivity() {
 
             lifecycleScope.launch {
                 try {
-                    // ✅ 4. استدعاء صحيح للنسخة 3.6.0
-                    SupabaseClientProvider.client.auth.verifyEmailOtp(
+                    SupabaseClient.instance.auth.verifyEmailOtp(
                         type = OtpType.Email.EMAIL,
                         email = email,
                         token = code
