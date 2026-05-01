@@ -3,10 +3,7 @@ package com.example.mostaqlapp.auth
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ProgressBar
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import io.github.jan.supabase.auth.auth
@@ -16,44 +13,25 @@ import kotlinx.coroutines.launch
 class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // ربط مباشر بملف الـ R لإنهاء مشكلة Unresolved reference
         setContentView(com.example.mostaqlapp.R.layout.activity_register)
 
         val emailField = findViewById<EditText>(com.example.mostaqlapp.R.id.email)
-        val passwordField = findViewById<EditText>(com.example.mostaqlapp.R.id.password)
-        val confirmPasswordField = findViewById<EditText>(com.example.mostaqlapp.R.id.confirmPassword)
-        val registerButton = findViewById<Button>(com.example.mostaqlapp.R.id.registerBtn)
-        val loadingBar = findViewById<ProgressBar>(com.example.mostaqlapp.R.id.progressBar)
+        val passField = findViewById<EditText>(com.example.mostaqlapp.R.id.password)
+        val regBtn = findViewById<Button>(com.example.mostaqlapp.R.id.registerBtn)
 
-        registerButton.setOnClickListener {
+        regBtn.setOnClickListener {
             val emailText = emailField.text.toString().trim()
-            val passText = passwordField.text.toString().trim()
-            val confirmText = confirmPasswordField.text.toString().trim()
-
-            if (emailText.isEmpty() || passText.isEmpty() || confirmText.isEmpty()) {
-                Toast.makeText(this, "املأ البيانات", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            loadingBar.visibility = View.VISIBLE
-            registerButton.isEnabled = false
+            val passText = passField.text.toString().trim()
 
             lifecycleScope.launch {
                 try {
-                    // مسار كامل لكلاس البيانات
                     com.example.mostaqlapp.data.SupabaseClient.client.auth.signUpWith(Email) {
                         email = emailText
                         password = passText
                     }
-                    val intent = Intent(this@RegisterActivity, com.example.mostaqlapp.auth.VerifyOtpActivity::class.java)
-                    intent.putExtra("email", emailText)
-                    startActivity(intent)
-                    finish()
+                    startActivity(Intent(this@RegisterActivity, com.example.mostaqlapp.auth.VerifyOtpActivity::class.java))
                 } catch (e: Exception) {
-                    Toast.makeText(this@RegisterActivity, "خطأ: ${e.localizedMessage}", Toast.LENGTH_LONG).show()
-                } finally {
-                    loadingBar.visibility = View.GONE
-                    registerButton.isEnabled = true
+                    Toast.makeText(this@RegisterActivity, e.message, Toast.LENGTH_SHORT).show()
                 }
             }
         }
